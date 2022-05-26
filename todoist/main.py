@@ -1,14 +1,16 @@
-import projects
-import tasks
+import os
 import sys
+from tkinter import messagebox
+
 import pyautogui
 from PyQt5.QtCore import QCoreApplication, Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
-import os
 from todoist_api_python.api import TodoistAPI
-from datetime import datetime
+
+import projects
+import tasks
 
 
 def get_api():
@@ -25,11 +27,14 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
         # Load config
         # config = configparser.ConfigParser()
         # config.read('config.txt')
         # option_values = config.get('settings', 'option')
         # option_value_list = json.loads(option_values)
+
+        # Get project data
         global apikey
         apikey = get_api()
         print(apikey)
@@ -102,10 +107,15 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
+            print(event.key())
             self.close()
+        elif event.key() == Qt.Key_F2:
+            print(event.key())
 
 
 app = QApplication(sys.argv)
 w = MainWindow()
 w.show()
 app.exec_()
+#  True:
+#    pass
