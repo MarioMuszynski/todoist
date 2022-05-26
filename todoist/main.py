@@ -100,6 +100,10 @@ class MainWindow(QMainWindow):
         tasks.create_new_task(apikey, project_id, task_content, priority, formatted_date)
         QCoreApplication.quit()
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
+
 
 app = QApplication(sys.argv)
 w = MainWindow()
