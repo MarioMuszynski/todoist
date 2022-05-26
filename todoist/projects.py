@@ -1,13 +1,3 @@
-import os
-
-from todoist_api_python.api import TodoistAPI
-
-
-def get_api():
-    todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
-    return todoist_api
-
-
 def get_all_projects(todoist_api):
     try:
         project_list = todoist_api.get_projects()

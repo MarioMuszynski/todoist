@@ -6,6 +6,14 @@ from PyQt5.QtCore import QCoreApplication, Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
+import os
+from todoist_api_python.api import TodoistAPI
+
+
+def get_api():
+    todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
+    return todoist_api
+
 
 class MainWindow(QMainWindow):
 
@@ -17,7 +25,7 @@ class MainWindow(QMainWindow):
         # option_values = config.get('settings', 'option')
         # option_value_list = json.loads(option_values)
         global apikey
-        apikey = projects.get_api()
+        apikey = get_api()
         print(apikey)
         global project_list
         project_list = projects.get_all_projects(apikey)
@@ -83,7 +91,7 @@ class MainWindow(QMainWindow):
             if item.name == selected_project:
                 project_id = item.id
                 break
-        tasks.create_new_task(apikey,project_id,task_content,priority)
+        tasks.create_new_task(apikey, project_id, task_content, priority)
         QCoreApplication.quit()
 
 
