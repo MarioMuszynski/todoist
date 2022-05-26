@@ -8,11 +8,17 @@ from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPush
     QHBoxLayout, QDateEdit
 import os
 from todoist_api_python.api import TodoistAPI
+from datetime import datetime
 
 
 def get_api():
     todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
     return todoist_api
+
+
+def click_cancel():
+    print("Cancelling")
+    QCoreApplication.quit()
 
 
 class MainWindow(QMainWindow):
@@ -42,7 +48,7 @@ class MainWindow(QMainWindow):
         self.buttonCreate = QPushButton('Create', self)
         self.buttonCreate.clicked.connect(self.click_create)
         self.buttonCancel = QPushButton('Cancel', self)
-        self.buttonCancel.clicked.connect(self.click_cancel)
+        self.buttonCancel.clicked.connect(click_cancel)
         self.textbox = QLineEdit(self)
         self.textbox.setFixedHeight(35)
         self.date_picker = QDateEdit(calendarPopup=True)
@@ -78,20 +84,20 @@ class MainWindow(QMainWindow):
         self.setWindowFlag(Qt.WindowStaysOnTopHint)
         print("Layout set")
 
-    def click_cancel(self):
-        print("Cancelling")
-        QCoreApplication.quit()
-
     def click_create(self):
         print("Creating task")
         selected_project = self.combobox1.currentText()
         priority = self.combobox2.currentText()
+        task_date = self.date_picker.date()
+        print(task_date)
+        formatted_date = task_date.toString('yyyy-MM-dd')
+        print(formatted_date)
         task_content = self.textbox.text()
         for item in project_list:
             if item.name == selected_project:
                 project_id = item.id
                 break
-        tasks.create_new_task(apikey, project_id, task_content, priority)
+        tasks.create_new_task(apikey, project_id, task_content, priority, formatted_date)
         QCoreApplication.quit()
 
 
