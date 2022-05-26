@@ -1,14 +1,11 @@
+import projects
+import tasks
 import sys
-
 import pyautogui
 from PyQt5.QtCore import QCoreApplication, Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
-
-from tasks import *
-from projects import *
-
 
 class MainWindow(QMainWindow):
 
@@ -20,14 +17,14 @@ class MainWindow(QMainWindow):
         # option_values = config.get('settings', 'option')
         # option_value_list = json.loads(option_values)
         global apikey
-        apikey = get_api()
+        apikey = projects.get_api()
         print(apikey)
-        global projects
-        projects = get_all_projects(apikey)
+        global project_list
+        project_list = projects.get_all_projects(apikey)
 
         # Populate dropdown
         self.combobox1 = QComboBox()
-        for item in projects:
+        for item in project_list:
             self.combobox1.addItem(item.name)
         self.combobox2 = QComboBox()
         priorities = ["1", "2", "3", "4"]
@@ -82,11 +79,11 @@ class MainWindow(QMainWindow):
         selected_project = self.combobox1.currentText()
         priority = self.combobox2.currentText()
         task_content = self.textbox.text()
-        for item in projects:
+        for item in project_list:
             if item.name == selected_project:
                 project_id = item.id
                 break
-        create_new_task(apikey,project_id,task_content,priority)
+        tasks.create_new_task(apikey,project_id,task_content,priority)
         QCoreApplication.quit()
 
 
