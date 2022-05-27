@@ -10,6 +10,7 @@ pandas = "^1.4.2"
 PyAutoGUI = "^0.9.53"
 PyQt5 = "^5.15.6"
 todoist-api-python = "^1.1.1"
+keyboard = "^0.13.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
