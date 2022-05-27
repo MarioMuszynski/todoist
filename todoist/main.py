@@ -71,23 +71,21 @@ class MainWindow(QMainWindow):
             self.layout.addWidget(self.textbox)
             self.layout.addWidget(self.buttonCreate)
             self.layout.addWidget(self.buttonCancel)
+            self.main()
 
         except Exception as error:
             print(error)
 
     def main(self):
-        app = QApplication(sys.argv)
-        app.exec()
         while True:
             try:
                 if keyboard.is_pressed('~'):
                     print("Pressed ~")
-                    MainWindow.show()
+                    self.show()
                     self.initUI()
-                    MainWindow.hide()
+                    self.hide()
             except Exception as error:
                 print(error)
-        self.initUI()
 
     def initUI(self):
         try:
@@ -153,5 +151,7 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    m = MainWindow()
-    m.main()
+    app = QApplication(sys.argv)
+    w = MainWindow()
+    w.show()
+    app.exec_()
