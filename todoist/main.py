@@ -23,18 +23,31 @@ def get_api():
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        print("Initializing")
+        self.date_picker = None
+        self.textbox = None
+        self.buttonCancel = None
+        self.buttonCreate = None
+        self.combobox2 = None
+        self.combobox1 = None
         try:
+            # Initialize superclass
             print("Initializing superclass")
             super().__init__()
-            print("Superclass initialized")
+            # Set layout
+            print("Setting layout")
+            self.layout = QHBoxLayout()
+            self.container = QWidget()
+            self.container.setLayout(self.layout)
+            self.setCentralWidget(self.container)
+            self.setWindowFlag(Qt.FramelessWindowHint)
+            self.setWindowFlag(Qt.WindowStaysOnTopHint)
+            print("Layout set")
+            self.initUI()
+        except Exception as error:
+            print(error)
 
-            # Load config
-            # config = configparser.ConfigParser()
-            # config.read('config.txt')
-            # option_values = config.get('settings', 'option')
-            # option_value_list = json.loads(option_values)
-
+    def initUI(self):
+        try:
             # Get project data
             print("Getting project data")
             global apikey
@@ -42,8 +55,8 @@ class MainWindow(QMainWindow):
             print(apikey)
             global project_list
             project_list = projects.get_all_projects(apikey)
-
             print("Populating dropdowns")
+
             # Populate dropdown
             self.combobox1 = QComboBox()
             for item in project_list:
@@ -73,7 +86,6 @@ class MainWindow(QMainWindow):
             print("Font size set")
 
             # Add to layout
-            self.layout = QHBoxLayout()
             self.layout.addWidget(self.combobox1)
             self.layout.addWidget(self.combobox2)
             self.layout.addWidget(self.date_picker)
@@ -82,15 +94,10 @@ class MainWindow(QMainWindow):
             self.layout.addWidget(self.buttonCancel)
             print("Objects added to layout")
 
-            # Set layout
-            self.container = QWidget()
-            self.container.setLayout(self.layout)
-            self.setCentralWidget(self.container)
+            # Draw UI at cursor position
             current_mouse_x, current_mouse_y = pyautogui.position()
             self.setGeometry(current_mouse_x, current_mouse_y, 900, 100)
-            self.setWindowFlag(Qt.FramelessWindowHint)
-            self.setWindowFlag(Qt.WindowStaysOnTopHint)
-            print("Layout set")
+
         except Exception as error:
             print(error)
 
@@ -133,24 +140,19 @@ class MainWindow(QMainWindow):
             print(error)
 
 
-global app
-global w
-while True:
+if __name__ == '__main__':
+    import sys
+
+    app = QApplication(sys.argv)
+    m = MainWindow()
     while True:
         try:
             if keyboard.is_pressed('~'):
                 print("Pressed ~")
-                app = QApplication(sys.argv)
-                print("Application loaded")
-                w = MainWindow()
-                print("Main window declared")
-                w.show()
-                print("Window shown")
-                app.exec_()
-                print("Application run finished")
-                w.close()
-                QCoreApplication.instance().quit()
-                app.closeAllWindows()
-                print("Application exited")
+                m.show()
+                app.exec()
+                m.hide
+                # sys.exit(app.exec())
+                print("Window hidden")
         except Exception as error:
             print(error)
