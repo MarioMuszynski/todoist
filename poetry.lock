@@ -56,6 +56,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "infi"
+version = "0.0.1"
+description = "virtual package for all infi.* packages"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "keyboard"
 version = "0.13.5"
 description = "Hook and simulate keyboard events on Windows and Linux"
@@ -2232,7 +2240,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "773d32451caeb6c94c6a9ec86320f5ca2779da97bdb14fadec9686dce51f9174"
+content-hash = "d3046b7333828ab40aa809855eb1f2f6a20d27bea5fce8cb47e1cea780c0ef8a"
 
 [metadata.files]
 atomicwrites = [
@@ -2258,6 +2266,9 @@ colorama = [
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
+]
+infi = [
+    {file = "infi-0.0.1.tar.gz", hash = "sha256:82e40fdfd37b425d3ffeaf2a5d00aac7c491f355feb0a61744b50f9e6bba872a"},
 ]
 keyboard = [
     {file = "keyboard-0.13.5-py3-none-any.whl", hash = "sha256:8e9c2422f1217e0bd84489b9ecd361027cc78415828f4fe4f88dd4acd587947b"},

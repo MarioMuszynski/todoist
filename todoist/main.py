@@ -8,29 +8,26 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
-
+import infi.systray
 import projects
 import tasks
 
 
 def get_api():
-    todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
-    return todoist_api
-
-
-def click_cancel():
     try:
-        print("Cancelling")
-        QCoreApplication.quit()
+        todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
+        return todoist_api
     except Exception as error:
         print(error)
 
 
 class MainWindow(QMainWindow):
-
     def __init__(self):
+        print("Initializing")
         try:
+            print("Initializing superclass")
             super().__init__()
+            print("Superclass initialized")
 
             # Load config
             # config = configparser.ConfigParser()
@@ -39,12 +36,14 @@ class MainWindow(QMainWindow):
             # option_value_list = json.loads(option_values)
 
             # Get project data
+            print("Getting project data")
             global apikey
             apikey = get_api()
             print(apikey)
             global project_list
             project_list = projects.get_all_projects(apikey)
 
+            print("Populating dropdowns")
             # Populate dropdown
             self.combobox1 = QComboBox()
             for item in project_list:
@@ -57,7 +56,7 @@ class MainWindow(QMainWindow):
             self.buttonCreate = QPushButton('Create', self)
             self.buttonCreate.clicked.connect(self.click_create)
             self.buttonCancel = QPushButton('Cancel', self)
-            self.buttonCancel.clicked.connect(click_cancel)
+            self.buttonCancel.clicked.connect(self.click_cancel)
             self.textbox = QLineEdit(self)
             self.textbox.setFixedHeight(35)
             self.date_picker = QDateEdit(calendarPopup=True)
@@ -95,6 +94,14 @@ class MainWindow(QMainWindow):
         except Exception as error:
             print(error)
 
+    def click_cancel(self):
+        try:
+            print("Cancelling")
+            self.close()
+            print("Application cancelled")
+        except Exception as error:
+            print(error)
+
     def click_create(self):
         try:
             print("Creating task")
@@ -110,7 +117,9 @@ class MainWindow(QMainWindow):
                     project_id = item.id
                     break
             tasks.create_new_task(apikey, project_id, task_content, priority, formatted_date)
-            QCoreApplication.quit()
+            print("Task created")
+            self.close()
+            print("Application quit")
         except Exception as error:
             print(error)
 
@@ -118,18 +127,30 @@ class MainWindow(QMainWindow):
         try:
             if event.key() == Qt.Key_Escape:
                 print("Pressed escape")
-                QCoreApplication.quit()
+                self.close()
+                print("Application quit")
         except Exception as error:
             print(error)
 
 
+global app
+global w
 while True:
-    try:
-        if keyboard.is_pressed('~'):
-            print("Key pressed")
-            app = QApplication(sys.argv)
-            w = MainWindow()
-            w.show()
-            app.exec_()
-    except Exception as error:
-        print(error)
+    while True:
+        try:
+            if keyboard.is_pressed('~'):
+                print("Pressed ~")
+                app = QApplication(sys.argv)
+                print("Application loaded")
+                w = MainWindow()
+                print("Main window declared")
+                w.show()
+                print("Window shown")
+                app.exec_()
+                print("Application run finished")
+                w.close()
+                QCoreApplication.instance().quit()
+                app.closeAllWindows()
+                print("Application exited")
+        except Exception as error:
+            print(error)
