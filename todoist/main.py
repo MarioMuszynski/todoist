@@ -1,14 +1,12 @@
 import os
 import sys
 import keyboard
-
 import pyautogui
 from PyQt5.QtCore import QCoreApplication, Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
-
 import projects
 import tasks
 
