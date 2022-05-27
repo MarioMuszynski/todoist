@@ -1,6 +1,6 @@
 import os
 import sys
-from tkinter import messagebox
+import keyboard
 
 import pyautogui
 from PyQt5.QtCore import QCoreApplication, Qt, QDate
@@ -113,9 +113,13 @@ class MainWindow(QMainWindow):
             print(event.key())
 
 
-app = QApplication(sys.argv)
-w = MainWindow()
-w.show()
-app.exec_()
-#  True:
-#    pass
+while True:
+    try:
+        if keyboard.is_pressed('~'):
+            print("Key pressed")
+            app = QApplication(sys.argv)
+            w = MainWindow()
+            w.show()
+            app.exec_()
+    except Exception as error:
+        print(error)
