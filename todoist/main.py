@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
             # Initialize superclass
             print("Initializing superclass")
             super().__init__()
+
             # Set layout
             print("Setting layout")
             self.layout = QHBoxLayout()
@@ -42,30 +43,10 @@ class MainWindow(QMainWindow):
             self.setWindowFlag(Qt.FramelessWindowHint)
             self.setWindowFlag(Qt.WindowStaysOnTopHint)
             print("Layout set")
-            self.initUI()
-        except Exception as error:
-            print(error)
-
-    def initUI(self):
-        try:
-            # Get project data
-            print("Getting project data")
-            global apikey
-            apikey = get_api()
-            print(apikey)
-            global project_list
-            project_list = projects.get_all_projects(apikey)
-            print("Populating dropdowns")
-
-            # Populate dropdown
-            self.combobox1 = QComboBox()
-            for item in project_list:
-                self.combobox1.addItem(item.name)
-            self.combobox2 = QComboBox()
-            priorities = ["1", "2", "3", "4"]
-            self.combobox2.addItems(priorities)
 
             # Create objects
+            self.combobox1 = QComboBox()
+            self.combobox2 = QComboBox()
             self.buttonCreate = QPushButton('Create', self)
             self.buttonCreate.clicked.connect(self.click_create)
             self.buttonCancel = QPushButton('Cancel', self)
@@ -74,7 +55,6 @@ class MainWindow(QMainWindow):
             self.textbox.setFixedHeight(35)
             self.date_picker = QDateEdit(calendarPopup=True)
             self.date_picker.setDate(QDate.currentDate())
-            print("Objects created")
 
             # Set font sizes
             self.textbox.setFont(QFont('Calibri', 18))
@@ -83,7 +63,6 @@ class MainWindow(QMainWindow):
             self.date_picker.setFont(QFont('Calibri', 12))
             self.buttonCreate.setFont(QFont('Calibri', 12))
             self.buttonCancel.setFont(QFont('Calibri', 12))
-            print("Font size set")
 
             # Add to layout
             self.layout.addWidget(self.combobox1)
@@ -92,7 +71,40 @@ class MainWindow(QMainWindow):
             self.layout.addWidget(self.textbox)
             self.layout.addWidget(self.buttonCreate)
             self.layout.addWidget(self.buttonCancel)
-            print("Objects added to layout")
+
+        except Exception as error:
+            print(error)
+
+    def main(self):
+        app = QApplication(sys.argv)
+        app.exec()
+        while True:
+            try:
+                if keyboard.is_pressed('~'):
+                    print("Pressed ~")
+                    MainWindow.show()
+                    self.initUI()
+                    MainWindow.hide()
+            except Exception as error:
+                print(error)
+        self.initUI()
+
+    def initUI(self):
+        try:
+            # Get project data
+            global apikey
+            apikey = get_api()
+            print(apikey)
+            global project_list
+            project_list = projects.get_all_projects(apikey)
+
+            # Populate dropdown
+            self.combobox1.clear()
+            self.combobox2.clear()
+            for item in project_list:
+                self.combobox1.addItem(item.name)
+            priorities = ["1", "2", "3", "4"]
+            self.combobox2.addItems(priorities)
 
             # Draw UI at cursor position
             current_mouse_x, current_mouse_y = pyautogui.position()
@@ -141,18 +153,5 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    import sys
-
-    app = QApplication(sys.argv)
     m = MainWindow()
-    while True:
-        try:
-            if keyboard.is_pressed('~'):
-                print("Pressed ~")
-                m.show()
-                app.exec()
-                m.hide
-                # sys.exit(app.exec())
-                print("Window hidden")
-        except Exception as error:
-            print(error)
+    m.main()
