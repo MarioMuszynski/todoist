@@ -13,14 +13,6 @@ import projects
 import tasks
 
 
-def get_api():
-    try:
-        todoist_api = TodoistAPI(os.environ['TODOIST_API_KEY'])
-        return todoist_api
-    except Exception as error:
-        print(error)
-
-
 class MainWindow(QMainWindow):
     def __init__(self):
         self.date_picker = None
@@ -77,22 +69,22 @@ class MainWindow(QMainWindow):
             print(error)
 
     def main(self):
+        global apikey
+        apikey = TodoistAPI(os.environ['TODOIST_API_KEY'])
         while True:
             try:
                 if keyboard.is_pressed('~'):
                     print("Pressed ~")
                     self.show()
-                    self.initUI()
+                    self.exec_()
+                    self.initUI(apikey)
                     self.hide()
             except Exception as error:
                 print(error)
 
-    def initUI(self):
+    def initUI(self, apikey):
         try:
             # Get project data
-            global apikey
-            apikey = get_api()
-            print(apikey)
             global project_list
             project_list = projects.get_all_projects(apikey)
 
@@ -154,4 +146,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     w = MainWindow()
     w.show()
-    app.exec_()
