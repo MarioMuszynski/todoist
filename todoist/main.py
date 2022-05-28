@@ -13,6 +13,8 @@ import projects
 import tasks
 
 
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         self.date_picker = None
@@ -69,26 +71,31 @@ class MainWindow(QMainWindow):
             print(error)
 
     def main(self):
-        global apikey
-        apikey = TodoistAPI(os.environ['TODOIST_API_KEY'])
+        print("Running main")
         while True:
             try:
                 if keyboard.is_pressed('~'):
                     print("Pressed ~")
                     self.show()
-                    self.exec_()
-                    self.initUI(apikey)
+                    self.initUI()
+                    app.exec_()
                     self.hide()
             except Exception as error:
                 print(error)
 
-    def initUI(self, apikey):
+    def initUI(self):
         try:
+            print("Initializing UI ")
+
             # Get project data
+            print("Getting project data")
+            global api
             global project_list
-            project_list = projects.get_all_projects(apikey)
+            api = TodoistAPI(os.environ['TODOIST_API_KEY'])
+            project_list = projects.get_all_projects(api)
 
             # Populate dropdown
+            print("Populating dropdowns")
             self.combobox1.clear()
             self.combobox2.clear()
             for item in project_list:
@@ -97,6 +104,7 @@ class MainWindow(QMainWindow):
             self.combobox2.addItems(priorities)
 
             # Draw UI at cursor position
+            print("Drawing UI at cursor location")
             current_mouse_x, current_mouse_y = pyautogui.position()
             self.setGeometry(current_mouse_x, current_mouse_y, 900, 100)
 
@@ -105,9 +113,9 @@ class MainWindow(QMainWindow):
 
     def click_cancel(self):
         try:
-            print("Cancelling")
+            print("Cancel pressed")
             self.close()
-            print("Application cancelled")
+            print("Window closed")
         except Exception as error:
             print(error)
 
@@ -125,10 +133,10 @@ class MainWindow(QMainWindow):
                 if item.name == selected_project:
                     project_id = item.id
                     break
-            tasks.create_new_task(apikey, project_id, task_content, priority, formatted_date)
+            tasks.create_new_task(api, project_id, task_content, priority, formatted_date)
             print("Task created")
             self.close()
-            print("Application quit")
+            print("Window closed")
         except Exception as error:
             print(error)
 
@@ -137,12 +145,13 @@ class MainWindow(QMainWindow):
             if event.key() == Qt.Key_Escape:
                 print("Pressed escape")
                 self.close()
-                print("Application quit")
+                print("Window closed")
         except Exception as error:
             print(error)
 
 
 if __name__ == '__main__':
+    global app
     app = QApplication(sys.argv)
     w = MainWindow()
     w.show()
