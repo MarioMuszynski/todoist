@@ -64,6 +64,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "infi.systray"
+version = "0.1.12"
+description = "Windows system tray icon"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "keyboard"
 version = "0.13.5"
 description = "Hook and simulate keyboard events on Windows and Linux"
@@ -73,6 +81,14 @@ python-versions = "*"
 
 [package.dependencies]
 pyobjc = {version = "*", markers = "sys_platform == \"darwin\""}
+
+[[package]]
+name = "logging"
+version = "0.4.9.6"
+description = "A logging module for Python"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "more-itertools"
@@ -2240,7 +2256,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d3046b7333828ab40aa809855eb1f2f6a20d27bea5fce8cb47e1cea780c0ef8a"
+content-hash = "323a9f06aeb1986233aecedaa38a0c99ddef3cff7c1edb80743fd59dbafb63e9"
 
 [metadata.files]
 atomicwrites = [
@@ -2270,9 +2286,16 @@ idna = [
 infi = [
     {file = "infi-0.0.1.tar.gz", hash = "sha256:82e40fdfd37b425d3ffeaf2a5d00aac7c491f355feb0a61744b50f9e6bba872a"},
 ]
+"infi.systray" = [
+    {file = "infi.systray-0.1.12-py3-none-any.whl", hash = "sha256:4041ab3693f7f00a6b2b2d7b553bf60fce8941708b83e32261ca40926952ed0d"},
+    {file = "infi.systray-0.1.12.tar.gz", hash = "sha256:635bc10fabd3ba60a2382922fdec1e4e47efaea4b8c5ea7e437f6cdedae884d3"},
+]
 keyboard = [
     {file = "keyboard-0.13.5-py3-none-any.whl", hash = "sha256:8e9c2422f1217e0bd84489b9ecd361027cc78415828f4fe4f88dd4acd587947b"},
     {file = "keyboard-0.13.5.zip", hash = "sha256:63ed83305955939ca5c9a73755e5cc43e8242263f5ad5fd3bb7e0b032f3d308b"},
+]
+logging = [
+    {file = "logging-0.4.9.6.tar.gz", hash = "sha256:26f6b50773f085042d301085bd1bf5d9f3735704db9f37c1ce6d8b85c38f2417"},
 ]
 more-itertools = [
     {file = "more-itertools-8.13.0.tar.gz", hash = "sha256:a42901a0a5b169d925f6f217cd5a190e32ef54360905b9c39ee7db5313bfec0f"},

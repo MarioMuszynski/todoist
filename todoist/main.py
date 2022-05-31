@@ -1,16 +1,16 @@
 import os
 import sys
+import logging
 
 import keyboard
-import pyautogui
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
-    QHBoxLayout, QDateEdit, QDesktopWidget
+    QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
 
-import systray
 import projects
+import systray
 import tasks
 
 
@@ -23,19 +23,30 @@ class MainWindow(QMainWindow):
         self.combobox2 = None
         self.combobox1 = None
         try:
+            # Initialize logging
+            logger = logging.getLogger('main_logger')
+            logger.basicConfig(filename='myapp.log')
+            logger.setLevel(level=logging.DEBUG)
+            logger.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            ch.setFormatter(formatter)
+            logger.addHandler(ch)
+
             # Initialize superclass
-            print("Initializing superclass")
+            logging.info("Initializing superclass")
             super().__init__()
 
             # Set layout
-            print("Setting layout")
+            logging.info("Setting layout")
             self.layout = QHBoxLayout()
             self.container = QWidget()
             self.container.setLayout(self.layout)
             self.setCentralWidget(self.container)
             self.setWindowFlag(Qt.FramelessWindowHint)
             self.setWindowFlag(Qt.WindowStaysOnTopHint)
-            print("Layout set")
+            logging.info("Layout set")
 
             # Create objects
             self.combobox1 = QComboBox()
@@ -65,12 +76,11 @@ class MainWindow(QMainWindow):
             self.layout.addWidget(self.buttonCreate)
             self.layout.addWidget(self.buttonCancel)
             self.main()
-
-        except Exception as error:
-            print(error)
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
 
     def main(self):
-        print("Running main")
+        logger = logging.getLogger('main_logger')
         # Loop waiting for ~ key input to show window
         while True:
             try:
@@ -80,22 +90,23 @@ class MainWindow(QMainWindow):
                     self.initUI()
                     app.exec_()
                     self.hide()
-            except Exception as error:
-                print(error)
+            except Exception as e:
+                logger.error(e, stack_info=True, exc_info=True)
 
     def initUI(self):
         try:
-            print("Initializing UI ")
+            logger = logging.getLogger('main_logger')
+            logger.info("Initializing UI ")
 
             # Get project data
-            print("Getting project data")
+            logging.info("Getting project data")
             global api
             global project_list
             api = TodoistAPI(os.environ['TODOIST_API_KEY'])
             project_list = projects.get_all_projects(api)
 
             # Populate dropdown
-            print("Populating dropdowns")
+            logging.info("Populating dropdowns")
             self.combobox1.clear()
             self.combobox2.clear()
             for item in project_list:
@@ -104,53 +115,56 @@ class MainWindow(QMainWindow):
             self.combobox2.addItems(priorities)
 
             # Draw UI at cursor position
-            print("Drawing UI")
+            logger.info("Drawing UI")
             screen = app.desktop().screenNumber(app.desktop().cursor().pos())
-            print(screen)
+            logger.info(screen)
             center_point = app.desktop().screenGeometry(screen).center()
-            print(center_point)
+            logger.info(center_point)
             self.setGeometry(center_point.x()-450, center_point.y()-50, 900, 100)
 
-        except Exception as error:
-            print(error)
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
 
     def click_cancel(self):
         try:
-            print("Cancel pressed")
+            logger = logging.getLogger('main_logger')
+            logger.info("Cancel pressed")
             self.close()
-            print("Window closed")
-        except Exception as error:
-            print(error)
+            logger.info("Window closed")
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
 
     def click_create(self):
         try:
-            print("Creating task")
+            logger = logging.getLogger('main_logger')
+            logger.info("Creating task")
             selected_project = self.combobox1.currentText()
             priority = self.combobox2.currentText()
             task_date = self.date_picker.date()
-            print(task_date)
+            logger.info(task_date)
             formatted_date = task_date.toString('yyyy-MM-dd')
-            print(formatted_date)
+            logging.info(formatted_date)
             task_content = self.textbox.text()
             for item in project_list:
                 if item.name == selected_project:
                     project_id = item.id
                     break
             tasks.create_new_task(api, project_id, task_content, priority, formatted_date)
-            print("Task created")
+            logger.info("Task created")
             self.close()
-            print("Window closed")
-        except Exception as error:
-            print(error)
+            logger.info("Window closed")
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
 
     def keyPressEvent(self, event):
         try:
+            logger = logging.getLogger('main_logger')
             if event.key() == Qt.Key_Escape:
-                print("Pressed escape")
+                logger.info("Pressed escape")
                 self.close()
-                print("Window closed")
-        except Exception as error:
-            print(error)
+                logger.info("Window closed")
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
 
 
 if __name__ == '__main__':
