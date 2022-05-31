@@ -3,14 +3,16 @@ import sys
 
 import keyboard
 import pyautogui
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import QCoreApplication, Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
-
+import infi.systray
 import projects
 import tasks
+
+
 
 
 class MainWindow(QMainWindow):
@@ -148,18 +150,8 @@ class MainWindow(QMainWindow):
             print(error)
 
 
-from infi.systray import SysTrayIcon
-
 if __name__ == '__main__':
-
-    systray = SysTrayIcon("icon.ico", "Example tray icon", None)
-    systray.start()
-
     global app
     app = QApplication(sys.argv)
     w = MainWindow()
     w.show()
-
-
-def say_hello(systray):
-    print("Hello, World!")
