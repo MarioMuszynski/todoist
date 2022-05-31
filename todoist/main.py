@@ -13,6 +13,7 @@ from infi.systray import SysTrayIcon
 import projects
 import systray
 import tasks
+import pkg_resources
 
 
 class MainWindow(QMainWindow):
@@ -161,15 +162,18 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     # Initialize logging
-    logging.basicConfig(filename='todoist.log')
-    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+    log_formatter = logging.Formatter('%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s')
     logger = logging.getLogger('main_logger')
-    logger.setLevel(level=logging.DEBUG)
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    logger.setLevel(level=logging.INFO)
+
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    file_handler = logging.FileHandler("{0}/{1}.log".format(project_root, "todoist"))
+    file_handler.setFormatter(log_formatter)
+    logger.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(log_formatter)
+    logger.addHandler(console_handler)
 
     # Start tray
     systray.start_tray()
