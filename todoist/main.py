@@ -23,32 +23,22 @@ class MainWindow(QMainWindow):
         self.combobox2 = None
         self.combobox1 = None
         try:
-            # Initialize logging
-            logger = logging.getLogger('main_logger')
-            logger.basicConfig(filename='myapp.log')
-            logger.setLevel(level=logging.DEBUG)
-            logger.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.DEBUG)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            ch.setFormatter(formatter)
-            logger.addHandler(ch)
-
             # Initialize superclass
-            logging.info("Initializing superclass")
+            logger = logging.getLogger('main_logger')
+            logger.info("Initializing superclass")
             super().__init__()
 
-            # Set layout
-            logging.info("Setting layout")
-            self.layout = QHBoxLayout()
-            self.container = QWidget()
-            self.container.setLayout(self.layout)
-            self.setCentralWidget(self.container)
+            # Set layout for Task window
+            logging.info("Setting layout for Task window")
+            self.layout_task = QHBoxLayout()
+            self.container_task = QWidget()
+            self.container_task.setLayout(self.layout_task)
+            self.setCentralWidget(self.container_task)
             self.setWindowFlag(Qt.FramelessWindowHint)
             self.setWindowFlag(Qt.WindowStaysOnTopHint)
-            logging.info("Layout set")
+            logger.info("Layout set")
 
-            # Create objects
+            # Create Task objects
             self.combobox1 = QComboBox()
             self.combobox2 = QComboBox()
             self.buttonCreate = QPushButton('Create', self)
@@ -68,14 +58,15 @@ class MainWindow(QMainWindow):
             self.buttonCreate.setFont(QFont('Calibri', 12))
             self.buttonCancel.setFont(QFont('Calibri', 12))
 
-            # Add to layout
-            self.layout.addWidget(self.combobox1)
-            self.layout.addWidget(self.combobox2)
-            self.layout.addWidget(self.date_picker)
-            self.layout.addWidget(self.textbox)
-            self.layout.addWidget(self.buttonCreate)
-            self.layout.addWidget(self.buttonCancel)
+            # Add objects to Task layout
+            self.layout_task.addWidget(self.combobox1)
+            self.layout_task.addWidget(self.combobox2)
+            self.layout_task.addWidget(self.date_picker)
+            self.layout_task.addWidget(self.textbox)
+            self.layout_task.addWidget(self.buttonCreate)
+            self.layout_task.addWidget(self.buttonCancel)
             self.main()
+
         except Exception as e:
             logger.error(e, stack_info=True, exc_info=True)
 
@@ -99,14 +90,14 @@ class MainWindow(QMainWindow):
             logger.info("Initializing UI ")
 
             # Get project data
-            logging.info("Getting project data")
+            logger.info("Getting project data")
             global api
             global project_list
             api = TodoistAPI(os.environ['TODOIST_API_KEY'])
             project_list = projects.get_all_projects(api)
 
             # Populate dropdown
-            logging.info("Populating dropdowns")
+            logger.info("Populating dropdowns")
             self.combobox1.clear()
             self.combobox2.clear()
             for item in project_list:
@@ -168,7 +159,21 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    # Initialize logging
+    logging.basicConfig(filename='todoist.log')
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+    logger = logging.getLogger('main_logger')
+    logger.setLevel(level=logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
+    # Start tray
     systray.start_tray()
+
+    # Start QApp
     global app
     app = QApplication(sys.argv)
     w = MainWindow()
