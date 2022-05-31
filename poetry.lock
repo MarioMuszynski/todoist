@@ -83,14 +83,6 @@ python-versions = "*"
 pyobjc = {version = "*", markers = "sys_platform == \"darwin\""}
 
 [[package]]
-name = "logging"
-version = "0.4.9.6"
-description = "A logging module for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "more-itertools"
 version = "8.13.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -2256,7 +2248,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "323a9f06aeb1986233aecedaa38a0c99ddef3cff7c1edb80743fd59dbafb63e9"
+content-hash = "7de73c2647ff712d9d6e0f0b5f41aaf5e7ac9007cb0902ae0afa189a8fb247a2"
 
 [metadata.files]
 atomicwrites = [
@@ -2293,9 +2285,6 @@ infi = [
 keyboard = [
     {file = "keyboard-0.13.5-py3-none-any.whl", hash = "sha256:8e9c2422f1217e0bd84489b9ecd361027cc78415828f4fe4f88dd4acd587947b"},
     {file = "keyboard-0.13.5.zip", hash = "sha256:63ed83305955939ca5c9a73755e5cc43e8242263f5ad5fd3bb7e0b032f3d308b"},
-]
-logging = [
-    {file = "logging-0.4.9.6.tar.gz", hash = "sha256:26f6b50773f085042d301085bd1bf5d9f3735704db9f37c1ce6d8b85c38f2417"},
 ]
 more-itertools = [
     {file = "more-itertools-8.13.0.tar.gz", hash = "sha256:a42901a0a5b169d925f6f217cd5a190e32ef54360905b9c39ee7db5313bfec0f"},
