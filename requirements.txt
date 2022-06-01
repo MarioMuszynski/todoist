@@ -2,3 +2,4 @@ pyqt5~=5.15.6
 keyboard~=0.13.5
 infi~=0.0.1
 psutil~=5.9.1
+requests~=2.27.1
