@@ -3,16 +3,15 @@ import sys
 
 import keyboard
 import pyautogui
-from PyQt5.QtCore import QCoreApplication, Qt, QDate
+from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
-    QHBoxLayout, QDateEdit
+    QHBoxLayout, QDateEdit, QDesktopWidget
 from todoist_api_python.api import TodoistAPI
-import infi.systray
+
+import systray
 import projects
 import tasks
-
-
 
 
 class MainWindow(QMainWindow):
@@ -72,6 +71,7 @@ class MainWindow(QMainWindow):
 
     def main(self):
         print("Running main")
+        # Loop waiting for ~ key input to show window
         while True:
             try:
                 if keyboard.is_pressed('~'):
@@ -104,9 +104,12 @@ class MainWindow(QMainWindow):
             self.combobox2.addItems(priorities)
 
             # Draw UI at cursor position
-            print("Drawing UI at cursor location")
-            current_mouse_x, current_mouse_y = pyautogui.position()
-            self.setGeometry(current_mouse_x, current_mouse_y, 900, 100)
+            print("Drawing UI")
+            screen = app.desktop().screenNumber(app.desktop().cursor().pos())
+            print(screen)
+            center_point = app.desktop().screenGeometry(screen).center()
+            print(center_point)
+            self.setGeometry(center_point.x()-450, center_point.y()-50, 900, 100)
 
         except Exception as error:
             print(error)
@@ -151,6 +154,7 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    systray.start_tray()
     global app
     app = QApplication(sys.argv)
     w = MainWindow()
