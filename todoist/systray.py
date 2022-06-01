@@ -1,7 +1,8 @@
 import os
 import sys
 import logging
-
+import infi
+import psutil as psutil
 from infi.systray import SysTrayIcon
 
 
@@ -35,7 +36,22 @@ def show_logs(systray):
 def close_everything(systray):
     try:
         logger = logging.getLogger('main_logger')
-        logger.info("Closing application")
-        sys.exit()
-    except:
-        logger.info(sys.exc_info()[0])
+        logger.info("Killing processes")
+        kill_process("todoist.exe")
+        logger.info("Exiting system")
+        sys.exit(0)
+    except Exception as e:
+        logger.error(e, stack_info=True, exc_info=True)
+
+
+def kill_process(process):
+    for proc in psutil.process_iter():
+        try:
+            # Check if process name contains the given name string.
+            if process.lower() in proc.name().lower():
+                proc.kill()
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return None
+
+

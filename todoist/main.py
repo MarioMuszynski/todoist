@@ -8,12 +8,13 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
-from infi.systray import SysTrayIcon
+import infi
+import infi.systray
+import pkg_resources
 
 import projects
 import systray
 import tasks
-import pkg_resources
 
 
 class MainWindow(QMainWindow):
@@ -31,7 +32,7 @@ class MainWindow(QMainWindow):
             super().__init__()
 
             # Set layout for Task window
-            logging.info("Setting layout for Task window")
+            logger.info("Setting layout for Task window")
             self.layout_task = QHBoxLayout()
             self.container_task = QWidget()
             self.container_task.setLayout(self.layout_task)
@@ -78,7 +79,7 @@ class MainWindow(QMainWindow):
         while True:
             try:
                 if keyboard.is_pressed('~'):
-                    print("Pressed ~")
+                    logger.info("Pressed ~")
                     self.show()
                     self.initUI()
                     app.exec_()
