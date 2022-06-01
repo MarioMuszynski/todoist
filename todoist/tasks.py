@@ -1,4 +1,8 @@
+import logging
+
+
 def create_new_task(todoist_api, project_id, task_content, priority, formatted_date):
+    logger = logging.getLogger('main_logger')
     try:
         task = todoist_api.add_task(
             content=task_content,
@@ -6,6 +10,6 @@ def create_new_task(todoist_api, project_id, task_content, priority, formatted_d
             priority=priority,
             due_date=formatted_date
         )
-        print(task)
-    except Exception as error:
-        print(error)
+        logger.info(task)
+    except Exception as e:
+        logger.error(e, stack_info=True, exc_info=True)

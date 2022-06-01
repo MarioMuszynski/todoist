@@ -1,26 +1,58 @@
+import logging
 import os
 import sys
-
+import psutil as psutil
 from infi.systray import SysTrayIcon
 
 
 def start_tray():
     try:
-        print("Creating tray icon")
+        logger = logging.getLogger('main_logger')
+        logger.info("Creating tray icon")
         project_root = os.path.dirname(os.path.abspath(__file__))
         icon_path = os.path.join(project_root, 'todoist-logo.ico')
-        menu_options = (("Options", None, show_options),)
-        systray = SysTrayIcon(icon_path, "Example tray icon", menu_options, on_quit=close_everything, default_menu_index=1)
+        menu_options = (("Show Logs", None, show_logs),)
+        systray = SysTrayIcon(icon_path, "Todoist Tool", menu_options, on_quit=close_everything,
+                              default_menu_index=1)
         systray.start()
-        print("Tray icon created")
-    except Exception as error:
-        print(error)
+        logger.info("Tray icon created")
+    except Exception as e:
+        logger.error(e, stack_info=True, exc_info=True)
 
 
-def show_options(systray):
-    pass
+def show_logs(systray):
+    try:
+        logger = logging.getLogger('main_logger')
+        logger.info("Opening log file")
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        log_path = os.path.join(project_root, 'todoist.log')
+        logger.info(log_path)
+        os.startfile(log_path)
+        logger.info("Log file opened")
+    except Exception as e:
+        logger.error(e, stack_info=True, exc_info=True)
 
 
 def close_everything(systray):
-    print("Closing through tray")
-    sys.exit()
+    try:
+        logger = logging.getLogger('main_logger')
+        logger.info("Killing processes")
+        kill_process("todoist.exe")
+        logger.info("Exiting system")
+        sys.exit(0)
+    except Exception as e:
+        logger.error(e, stack_info=True, exc_info=True)
+
+
+def kill_process(process):
+    logger = logging.getLogger('main_logger')
+    for proc in psutil.process_iter():
+        try:
+            if process.lower() in proc.name().lower():
+                logger.info("Killing " + proc.name)
+                proc.kill()
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return None
+
+
