@@ -13,6 +13,7 @@ import infi
 import infi.systray
 import pkg_resources
 import psutil
+import requests
 
 # Imports for project modules:
 import projects
