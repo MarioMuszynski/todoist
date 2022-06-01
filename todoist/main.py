@@ -1,18 +1,20 @@
 import os
 import sys
 import logging
-
 import keyboard
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QComboBox, QMainWindow, QApplication, QWidget, QPushButton, QLineEdit, \
     QHBoxLayout, QDateEdit
 from todoist_api_python.api import TodoistAPI
+
+# Imports for auto-py-to-exe:
 import infi
 import infi.systray
 import pkg_resources
 import psutil
 
+# Imports for project modules:
 import projects
 import systray
 import tasks

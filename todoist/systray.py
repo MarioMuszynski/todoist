@@ -1,7 +1,6 @@
+import logging
 import os
 import sys
-import logging
-import infi
 import psutil as psutil
 from infi.systray import SysTrayIcon
 
@@ -27,6 +26,7 @@ def show_logs(systray):
         logger.info("Opening log file")
         project_root = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(project_root, 'todoist.log')
+        logger.info(log_path)
         os.startfile(log_path)
         logger.info("Log file opened")
     except Exception as e:
@@ -45,10 +45,11 @@ def close_everything(systray):
 
 
 def kill_process(process):
+    logger = logging.getLogger('main_logger')
     for proc in psutil.process_iter():
         try:
-            # Check if process name contains the given name string.
             if process.lower() in proc.name().lower():
+                logger.info("Killing " + proc.name)
                 proc.kill()
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
