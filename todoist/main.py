@@ -11,6 +11,7 @@ from todoist_api_python.api import TodoistAPI
 import infi
 import infi.systray
 import pkg_resources
+import psutil
 
 import projects
 import systray
