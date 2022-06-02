@@ -14,28 +14,12 @@ def get_all_projects():
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
         headers["Authorization"] = bearer_token
-        resp = requests.get(url, headers=headers)
+        resp = requests.get(url, headers=headers, verify=False)
         logger.info(resp)
         if resp.status_code == 200:
-            data = resp.json()
-            project_list = json.load(data)
+            project_list = resp.json()
             return project_list
         else:
             return "Error"
-    except Exception as e:
-        logger.error(e, stack_info=True, exc_info=True)
-
-
-def get_project_id(todoist_api, project_name):
-    logger = logging.getLogger('main_logger')
-    try:
-        logger.info("Getting id for project " + project_name)
-        projects = todoist_api.get_projects()
-        for item in projects:
-            if item.name == project_name:
-                project_id = item.id
-                logger.info("Id: " + project_id)
-                break
-        return project_id
     except Exception as e:
         logger.error(e, stack_info=True, exc_info=True)
