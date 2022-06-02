@@ -20,6 +20,6 @@ def get_all_projects():
             project_list = resp.json()
             return project_list
         else:
-            return "Error"
+            return None
     except Exception as e:
         logger.error(e, stack_info=True, exc_info=True)

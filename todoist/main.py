@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import logging
@@ -106,7 +107,7 @@ class MainWindow(QMainWindow):
             self.combobox1.clear()
             self.combobox2.clear()
             for item in project_list:
-                self.combobox1.addItem(item.name)
+                self.combobox1.addItem(item["name"])
             priorities = ["1", "2", "3", "4"]
             self.combobox2.addItems(priorities)
 
@@ -142,8 +143,8 @@ class MainWindow(QMainWindow):
             logging.info(formatted_date)
             task_content = self.textbox.text()
             for item in project_list:
-                if item.name == selected_project:
-                    project_id = item.id
+                if item["name"] == selected_project:
+                    project_id = item["id"]
                     break
             tasks.create_new_task(project_id, task_content, priority, formatted_date)
             logger.info("Task created")

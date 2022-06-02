@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import requests
@@ -12,20 +13,22 @@ def create_new_task(project_id, task_content, priority, formatted_date):
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
         headers["Authorization"] = bearer_token
-        headers["Content-Type"] = ""
+        headers["Content-Type"] = "application/json"
         body = {
             "content": task_content,
             "due_string": formatted_date,
             "project_id": project_id,
             "priority": priority
         }
-        ""
-        resp = requests.post(url, headers=headers, data=body, verify=False)
-        print(resp.status_code)
+        data = json.dumps(body)
+        resp = requests.post(url, headers=headers, data=data, verify=False)
+        logger.info(resp.status_code)
         if resp.status_code == 200:
-            return 0
+            json_response = resp.json()
+            task_id = json_response["id"]
+            print(task_id)
+            return task_id
         else:
-            return 1
-        logger.info(task)
+            return 0
     except Exception as e:
         logger.error(e, stack_info=True, exc_info=True)
