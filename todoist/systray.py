@@ -49,7 +49,7 @@ def kill_process(process):
     for proc in psutil.process_iter():
         try:
             if process.lower() in proc.name().lower():
-                logger.info("Killing " + proc.name)
+                logger.info("Killing " + str(proc.name()))
                 proc.kill()
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass

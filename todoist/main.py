@@ -102,10 +102,13 @@ class MainWindow(QMainWindow):
             global project_list
             project_list = projects.get_all_projects()
 
-            # Populate dropdown
-            logger.info("Populating dropdowns")
+            # Clearing old values
             self.combobox1.clear()
             self.combobox2.clear()
+            self.textbox.clear()
+
+            # Populate dropdown
+            logger.info("Populating dropdowns")
             for item in project_list:
                 self.combobox1.addItem(item["name"])
             priorities = ["1", "2", "3", "4"]
